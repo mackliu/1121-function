@@ -10,7 +10,8 @@ echo "</pre>"; */
 //        ['description'=>'50萬','total'=>200],
 //        8);
 
-insert('options',['description'=>'60萬','subject_id'=>5,'total'=>0]);
+//insert('options',['description'=>'60萬','subject_id'=>5,'total'=>0]);
+del('options',21);
 
 function all($table){
     $dsn="mysql:host=localhost;charset=utf8;dbname=vote";
@@ -81,5 +82,15 @@ function insert($table,$cols){
     $result=$pdo->exec($sql);
 
     return $result;
+}
+
+
+function del($table,$id){
+    $dsn="mysql:host=localhost;charset=utf8;dbname=vote";
+    $pdo=new PDO($dsn,'root','');
+
+    $sql="delete from `$table` where `id`='$id'";
+
+    return $pdo->exec($sql);
 }
 ?>
