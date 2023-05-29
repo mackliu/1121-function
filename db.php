@@ -69,8 +69,14 @@ function insert($table,$cols){
     $pdo=new PDO($dsn,'root','');
     $col=array_keys($cols);
 
+/*     $sql ="insert into $table (`";
+    $sql .=join("`,`", $col);
+    $sql .="`) values('";
+    $sql .=join("','",$cols);
+    $sql .="')"; */
+
     $sql="insert into $table (`" . join("`,`", $col) . "`) values('".join("','",$cols)."')";
-    echo $sql;
+    //echo $sql;
 
     $result=$pdo->exec($sql);
 
