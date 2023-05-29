@@ -6,10 +6,11 @@ echo "</pre>";
 print_r(all('options'));
 echo "</pre>"; */
 
-update('options',
-        ['description'=>'50萬','total'=>200],
-        8);
+//update('options',
+//        ['description'=>'50萬','total'=>200],
+//        8);
 
+insert('options',['description'=>'60萬','subject_id'=>5,'total'=>0]);
 
 function all($table){
     $dsn="mysql:host=localhost;charset=utf8;dbname=vote";
@@ -59,6 +60,19 @@ function update($table,$cols,$id){
 
     $result=$pdo->exec($sql);
 
+
+    return $result;
+}
+
+function insert($table,$cols){
+    $dsn="mysql:host=localhost;charset=utf8;dbname=vote";
+    $pdo=new PDO($dsn,'root','');
+    $col=array_keys($cols);
+
+    $sql="insert into $table (`" . join("`,`", $col) . "`) values('".join("','",$cols)."')";
+    echo $sql;
+
+    $result=$pdo->exec($sql);
 
     return $result;
 }
