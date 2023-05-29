@@ -8,7 +8,7 @@ echo "</pre>"; */
 
 update('options',
         ['description'=>'50萬','total'=>200],
-        8);
+        ['subject_id'=>5,'total'=>9]);
 
 
 function all($table){
@@ -35,7 +35,7 @@ function find($table,$id){
 }
 
 //一次更新一筆
-function update($table,$cols,$id){
+function update($table,$cols,$def){
     $dsn="mysql:host=localhost;charset=utf8;dbname=vote";
     $pdo=new PDO($dsn,'root','');
 
@@ -43,22 +43,21 @@ function update($table,$cols,$id){
     // 'open_time'=>'2023-05-29',
     // 'close_time'=>'2023-06-05',
     //]
-    $tmp='';
+
     foreach($cols as $key => $value){
-
-       $tmp .= "`$key`='$value',";
-
+       $tmp[]= "`$key`='$value'";
     }
 
-    //刪除前後的多餘逗號','
-    $tmp=trim($tmp,',');
-
     //`subject`='今天天氣很好吧?',`open_time`='2023-05-29',`close_time`='2023-06-05'
+    foreach($def as $key => $value){
+        $con[]= "`$key`='$value'";
+     }
 
-    $sql="update `$table` set  $tmp where `id`='$id'";
+    //update `options` set `description`='50萬',`total`='200' where `subject_id`='5' && `total`='9'
 
+    $sql="update `$table` set  ".join(',',$tmp)." where ".join(" && ",$con);
+     echo $sql;
     $result=$pdo->exec($sql);
-
 
     return $result;
 }
