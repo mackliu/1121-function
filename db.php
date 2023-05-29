@@ -1,7 +1,10 @@
 <?php 
-echo "<pre>";
-print_r(find('options',23));
-echo "</pre>";
+//echo "<pre>";
+//print_r(find('options',23));
+//echo "</pre>";
+//echo "<pre>";
+//print_r(find('options',['subject_id'=>5,'description'=>'4.5萬']));
+//echo "</pre>";
 /* echo "<pre>";
 print_r(all('options'));
 echo "</pre>"; */
@@ -11,7 +14,8 @@ echo "</pre>"; */
 //        8);
 
 //insert('options',['description'=>'60萬','subject_id'=>5,'total'=>0]);
-del('options',21);
+del('options',8);
+del('options',['subject_id'=>5]);
 
 function all($table){
     $dsn="mysql:host=localhost;charset=utf8;dbname=vote";
@@ -24,12 +28,27 @@ function all($table){
     return $rows;
 }
 
-function find($table,$id){
+function find($table,$arg){
 
     $dsn="mysql:host=localhost;charset=utf8;dbname=vote";
     $pdo=new PDO($dsn,'root','');
 
-    $sql="select * from `$table`  where `id`='$id' ";
+    $sql="select * from `$table`  where ";
+
+    if(is_array($arg)){
+        foreach($arg as $key => $value){
+
+            $tmp[]="`$key`='$value'";
+        }
+
+        $sql .= join(" && ",$tmp);
+    }else{
+
+        $sql .= " `id` = '$arg' ";
+        
+    }
+
+    echo $sql;
 
     $row=$pdo->query($sql)->fetch(PDO::FETCH_ASSOC);
 
@@ -85,12 +104,25 @@ function insert($table,$cols){
 }
 
 
-function del($table,$id){
+function del($table,$arg){
     $dsn="mysql:host=localhost;charset=utf8;dbname=vote";
     $pdo=new PDO($dsn,'root','');
 
-    $sql="delete from `$table` where `id`='$id'";
+    $sql="delete from `$table` where ";
+    if(is_array($arg)){
+        foreach($arg as $key => $value){
 
+            $tmp[]="`$key`='$value'";
+        }
+
+        $sql .= join(" && ",$tmp);
+    }else{
+
+        $sql .= " `id` = '$arg' ";
+        
+    }
+
+    echo $sql;
     return $pdo->exec($sql);
 }
 ?>
