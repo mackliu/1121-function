@@ -1,4 +1,10 @@
 <?php 
+function pdo(){
+    $dsn="mysql:host=localhost;charset=utf8;dbname=vote";
+    $pdo=new PDO($dsn,'root','');
+    
+    return $pdo;
+}
 //echo "<pre>";
 //print_r(find('options',23));
 //echo "</pre>";
@@ -9,16 +15,17 @@
 print_r(all('options'));
 echo "</pre>"; */
 
-update('options',['id'=>8,'description'=>'50萬','total'=>200]);
-insert('options',['description'=>'50萬','total'=>200]);
+dd(all('options'));
+
+//update('options',['id'=>8,'description'=>'50萬','total'=>200]);
+//insert('options',['description'=>'50萬','total'=>200]);
 
 //insert('options',['description'=>'60萬','subject_id'=>5,'total'=>0]);
-del('options',8);
-del('options',['subject_id'=>5]);
+//del('options',8);
+//del('options',['subject_id'=>5]);
 
 function all($table){
-    $dsn="mysql:host=localhost;charset=utf8;dbname=vote";
-    $pdo=new PDO($dsn,'root','');
+   $pdo=pdo();
 
     $sql="select * from $table ";
 
@@ -28,9 +35,7 @@ function all($table){
 }
 
 function find($table,$arg){
-
-    $dsn="mysql:host=localhost;charset=utf8;dbname=vote";
-    $pdo=new PDO($dsn,'root','');
+    $pdo=pdo();
 
     $sql="select * from `$table`  where ";
 
@@ -56,8 +61,7 @@ function find($table,$arg){
 
 //一次更新一筆
 function update($table,$cols){
-    $dsn="mysql:host=localhost;charset=utf8;dbname=vote";
-    $pdo=new PDO($dsn,'root','');
+    $pdo=pdo();
 
     //['subject'=>'今天天氣很好吧?',
     // 'open_time'=>'2023-05-29',
@@ -81,8 +85,7 @@ function update($table,$cols){
 }
 
 function insert($table,$cols){
-    $dsn="mysql:host=localhost;charset=utf8;dbname=vote";
-    $pdo=new PDO($dsn,'root','');
+    $pdo=pdo();
     $col=array_keys($cols);
 
 /*     $sql ="insert into $table (`";
@@ -101,8 +104,7 @@ function insert($table,$cols){
 
 
 function del($table,$arg){
-    $dsn="mysql:host=localhost;charset=utf8;dbname=vote";
-    $pdo=new PDO($dsn,'root','');
+    $pdo=pdo();
 
     $sql="delete from `$table` where ";
     if(is_array($arg)){
@@ -130,4 +132,19 @@ function save($table,$cols){
         insert($table,$cols);
     }
 }
+
+//執行select 較複雜的語法
+function q($sql){
+    $pdo=pdo();
+
+    return $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+}
+
+//用來傾印陣列內容...direct_dump
+function dd($array){
+    echo "<pre>";
+    print_r($array);
+    echo "</pre>";
+}
+
 ?>
