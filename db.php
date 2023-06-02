@@ -15,14 +15,83 @@ function pdo(){
 print_r(all('options'));
 echo "</pre>"; */
 
-dd(all('options'));
+//dd(all('options'));
 
+echo _count('topics');
 //update('options',['id'=>8,'description'=>'50萬','total'=>200]);
 //insert('options',['description'=>'50萬','total'=>200]);
 
 //insert('options',['description'=>'60萬','subject_id'=>5,'total'=>0]);
 //del('options',8);
 //del('options',['subject_id'=>5]);
+echo "<br>";
+echo math('options','max','id');
+echo "<br>";
+echo math('options','min','id');
+echo "<br>";
+echo math('options','sum','total',['subject_id'=>7]);
+
+//計數用的函式
+function math($table,$math,$col,...$arg){
+    $pdo=pdo();
+ 
+     $sql="select $math(`$col`) from $table ";
+ 
+     if(!empty($arg)){
+         if(is_array($arg[0])){
+             foreach($arg[0] as $key => $value){
+ 
+                 $tmp[]="`$key`='$value'";
+             }
+     
+             $sql =$sql . " where " . join(" && ",$tmp);
+         }else{
+ 
+             $sql=$sql . " where " . $arg[0];
+             
+         }
+     }
+ 
+     if(isset($arg[1])){
+         $sql=$sql . " where " . $arg[1];
+     }
+     
+     //echo $sql;
+     $rows=$pdo->query($sql)->fetchColumn( );
+ 
+     return $rows;
+ }
+//計數用的函式
+function _count($table,...$arg){
+    $pdo=pdo();
+ 
+     $sql="select count(*) from $table ";
+ 
+     if(!empty($arg)){
+         if(is_array($arg[0])){
+             foreach($arg[0] as $key => $value){
+ 
+                 $tmp[]="`$key`='$value'";
+             }
+     
+             $sql =$sql . " where " . join(" && ",$tmp);
+         }else{
+ 
+             $sql=$sql .  " where " .$arg[0];
+             
+         }
+     }
+ 
+     if(isset($arg[1])){
+         $sql=$sql . " where " . $arg[1];
+     }
+ 
+     $rows=$pdo->query($sql)->fetchColumn( );
+ 
+     return $rows;
+ }
+
+
 
 /* 
  * all($table) => 全部資料表的內容
@@ -51,16 +120,16 @@ function all($table,...$arg){
                 $tmp[]="`$key`='$value'";
             }
     
-            $sql =$sql . join(" && ",$tmp);
+            $sql =$sql .  " where " . join(" && ",$tmp);
         }else{
 
-            $sql=$sql . $arg[0];
+            $sql=$sql . " where " . $arg[0];
             
         }
     }
 
     if(isset($arg[1])){
-        $sql=$sql . $arg[1];
+        $sql=$sql .  " where " . $arg[1];
     }
 
     $rows=$pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
