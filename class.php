@@ -41,3 +41,24 @@ echo $animal->getName();
 echo $animal->age();
 
 //echo $animal->speed();
+
+class Cat extends Animal{
+
+
+    function catrun(){
+        return $this->run();
+    }
+
+
+    function run(){
+        return "走走走";
+    }
+}
+
+
+echo "<BR>";
+$cat=new Cat;
+
+echo $cat->age();
+echo $cat->catrun();
+echo $cat->run();
